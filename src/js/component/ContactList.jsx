@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../store/appContext'
 import {Link} from 'react-router-dom'
 import { FaPencilAlt } from "react-icons/fa";
@@ -6,31 +6,45 @@ import { MdDeleteForever } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
-// import "../../styles/contact.css";
+import "../../styles/contactStyles.css";
 
 export const ContactList = () => {
     const { store, actions } = useContext(Context);
     const [showModal, setShowModal] = useState(false);
     const [deleteContact, setDeleteContact] = useState(null);
 
-    const handleClick = () => {
+    useEffect(()=>{
+        actions.loadContactsData();
+    },[])
+
+    const handleClick = (contactId) => {
+        console.log("ID del contacto a eliminar:", contactId); // Agregar console.log aquí
         setShowModal(true);
         setDeleteContact(contactId);
     }
 
+   
     const deletingContact = async () => {
         try {
-            const response = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
+            // Verificar si el contacto existe antes de intentar eliminarlo
+            const checkResponse = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`);
+            if (checkResponse.ok) {
+                // El contacto existe, proceder con la eliminación
+                const response = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`, {
+                    method: 'DELETE', // Utilizar DELETE en lugar de GET
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    await actions.loadContactsData();
+                    handleModalClose();
+                } else {
+                    throw new Error(response.statusText)
                 }
-            });
-            if (response.ok) {
-                await actions.localContactsData();
-                handleModalClose();
             } else {
-                throw new Error(response.statusText)
+                // El contacto no existe
+                console.error('Contact not found');
             }
         } catch (e) {
             console.error(e)
@@ -39,6 +53,8 @@ export const ContactList = () => {
             handleModalClose();
         }
     }
+    
+    
 
     const handleModalClose = () => {
         setShowModal(false);
@@ -57,7 +73,7 @@ export const ContactList = () => {
                         <div className='modal-body'>Are you sure?</div>
                         <div className='modal-footer'>
                             <button type='button' className='btn btn-secondary' onClick={handleModalClose}>Cancel</button>
-                            <button type='button' className='btn btn-secondary' onClick={deletingContact}></button>
+                            <button type='button' className='btn btn-secondary' onClick={deletingContact}>Yes</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +106,7 @@ export const ContactList = () => {
                                                 <span className='px-2'>
                                                 <Link to={`/updateContact/${item.id}`}><FaPencilAlt className='icons text-primary pt-2'/></Link>
                                                 </span>
-                                                <button className='delete' onClick={()=> handleClick(item.id)}><MdDeleteForever className='icons-garbage text danger pt-2'/></button>
+                                                <button className='delete' onClick={() => handleClick(item.id)}><MdDeleteForever className='icons-garbage text danger pt-2'/></button>
                                             </div>
                                         </li>
                                     </div>

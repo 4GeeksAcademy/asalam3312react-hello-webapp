@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
-import { Context } from '../store/appContext'
+import React, { useState } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Context } from '../store/appContext';
+import { json } from 'react-router-dom';
 
 export const UpdateContact = () => {
     const { actions, store } = React.useContext(Context);

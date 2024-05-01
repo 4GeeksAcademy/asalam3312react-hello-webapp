@@ -19,25 +19,26 @@ export const AddNewContact = () => {
         setFormData(prev => ({...prev,[name]:value}));
     }
 
-    const handleSubmit =async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             let response = await fetch('https://playground.4geeks.com/contact/agendas/andres/contacts', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: json.stringify(FormData)
-    });
-    if(!response.ok){
-        throw new Error(response.statusText)
-    };
-    await actions.localContactData();
-    navigate('/')
-        }catch(e){
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText)
+            };
+            await actions.loadContactsData();
+            navigate('/');
+        } catch (e) {
             console.error('Error posting contact', e)
         }
     }
+    
     return (
         <div className='container card mt-4 w-50'>
             <h1 className='pt-2 px-2'>Add new contact</h1>
@@ -51,14 +52,14 @@ export const AddNewContact = () => {
                     <input type='email' area-describedly='emailHelp' value={formData.email} onChange={change}  className='form-control'id='Email' name='email'></input>
                 </div>
                 <div className='mb-3'>
-                    <label htmlFor='Phone' className='form-label'>Full name</label>
+                    <label htmlFor='Phone' className='form-label'>Phone number</label>
                     <input type='number' area-describedly='' value={formData.phone} onChange={change}  className='form-control'id='Phone' name='phone'></input>
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='Address' className='form-label'>Address</label>
                     <input type='text' area-describedly='' value={formData.address} onChange={change}  className='form-control'id='Address' name='address'></input>
                 </div>
-                <button type='submit' className='btn btn-primary'> Create contact</button>
+                <button type='submit' className='btn btn-primary' onSubmit={handleSubmit}> Create contact</button>
             </form>
             <Link to={'/'} className='mt-2 pb-2 px-2'> Go back contact list</Link>
         </div>

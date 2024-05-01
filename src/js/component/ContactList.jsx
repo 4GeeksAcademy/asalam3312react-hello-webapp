@@ -25,11 +25,9 @@ export const ContactList = () => {
 
    
     const deletingContact = async () => {
+        console.log(deleteContact)
         try {
-            // Verificar si el contacto existe antes de intentar eliminarlo
-            const checkResponse = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`);
-            if (checkResponse.ok) {
-                // El contacto existe, proceder con la eliminación
+            
                 const response = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`, {
                     method: 'DELETE', // Utilizar DELETE en lugar de GET
                     headers: {
@@ -42,10 +40,7 @@ export const ContactList = () => {
                 } else {
                     throw new Error(response.statusText)
                 }
-            } else {
-                // El contacto no existe
-                console.error('Contact not found');
-            }
+            
         } catch (e) {
             console.error(e)
         }

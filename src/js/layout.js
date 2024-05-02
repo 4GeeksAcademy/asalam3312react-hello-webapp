@@ -23,7 +23,6 @@ const Layout = () => {
 		<div>
 			<BrowserRouter basename={basename}>
 				<ScrollToTop>
-					<Navbar />
 					<Routes>
 						<Route path="/" element={<ContactList />} />
 						<Route path="/AddNewContact" element ={<AddNewContact />} />

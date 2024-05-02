@@ -18,7 +18,7 @@ export const ContactList = () => {
     },[])
 
     const handleClick = (contactId) => {
-        console.log("ID del contacto a eliminar:", contactId); // Agregar console.log aquí
+        console.log("ID del contacto a eliminar:", contactId); 
         setShowModal(true);
         setDeleteContact(contactId);
     }
@@ -29,7 +29,7 @@ export const ContactList = () => {
         try {
             
                 const response = await fetch(`https://playground.4geeks.com/contact/agendas/andres/contacts/${deleteContact}`, {
-                    method: 'DELETE', // Utilizar DELETE en lugar de GET
+                    method: 'DELETE', 
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -88,7 +88,7 @@ export const ContactList = () => {
                                         <li className='d-flex justify-content-between'>
                                             <div className='d-flex'>
                                                 <div>
-                                                    <img src='' alt='Contact'></img>
+                                                    <img src='https://img.freepik.com/vector-premium/icono-perfil-avatar_188544-4755.jpg' alt='Contact'></img>
                                                 </div>
                                                 <div className='m-2'>
                                                     <p className='mx-2 fs-4 text text-dark'>{item.name}</p>
